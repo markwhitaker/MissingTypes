@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace uk.co.mainwave.MissingTypes.Test
 {
+    [SuppressMessage("ReSharper", "EqualExpressionComparison")]
+    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+    [SuppressMessage("ReSharper", "UnusedVariable")]
     public class VersionNumberTests
     {
         #region Constructor tests
@@ -289,6 +293,7 @@ namespace uk.co.mainwave.MissingTypes.Test
             Assert.IsTrue(v1 == v2);
             Assert.IsFalse(new VersionNumber(1) == new VersionNumber(2));
             Assert.IsFalse(new VersionNumber(1) == (VersionNumber)null);
+            // ReSharper disable once RedundantCast
             Assert.IsTrue((VersionNumber)null == (VersionNumber)null);
         }
 
@@ -350,6 +355,7 @@ namespace uk.co.mainwave.MissingTypes.Test
             Assert.IsTrue(new VersionNumber(1, 0, 0, 0) == "1.0.0");
             Assert.IsTrue(new VersionNumber(1, 0, 0, 0) == "1.0.0.0");
 
+            // ReSharper disable once UnusedVariable
             Assert.Throws<FormatException>(() => { var val = new VersionNumber("1.2.3.4") == string.Empty; });
             Assert.IsFalse(new VersionNumber(1) == "2");
             Assert.IsFalse(new VersionNumber("1.2.3.4") == (string)null);
@@ -444,6 +450,7 @@ namespace uk.co.mainwave.MissingTypes.Test
 
             Assert.IsTrue(new VersionNumber(1) != "2");
             Assert.Throws<FormatException>(() => { var val = new VersionNumber("1.2.3.4") != string.Empty; });
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             Assert.Throws<NullReferenceException>(() => { var val = new VersionNumber("1.2.3.4") != (string)null; });
         }
 

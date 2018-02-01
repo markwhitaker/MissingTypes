@@ -11,25 +11,25 @@ namespace uk.co.mainwave.MissingTypes
     {
         #region Constants
 
-        private const long KbMultiplier = 1024L;
-        private const long MbMultiplier = KbMultiplier << 10;
-        private const long GbMultiplier = KbMultiplier << 20;
-        private const long TbMultiplier = KbMultiplier << 30;
-        private const long PbMultiplier = KbMultiplier << 40;
+        private const ulong KbMultiplier = 1024L;
+        private const ulong MbMultiplier = KbMultiplier << 10;
+        private const ulong GbMultiplier = KbMultiplier << 20;
+        private const ulong TbMultiplier = KbMultiplier << 30;
+        private const ulong PbMultiplier = KbMultiplier << 40;
 
-        private const long ByteMask = 0x3FFL;
+        private const ulong ByteMask = 0x3FFL;
 
         #endregion
 
         #region Fields
 
-        private readonly long _bytes;
+        private readonly ulong _bytes;
 
         #endregion
 
         #region Constructors
 
-        private BinarySize(long bytes)
+        private BinarySize(ulong bytes)
         {
             _bytes = bytes;
         }
@@ -40,12 +40,22 @@ namespace uk.co.mainwave.MissingTypes
 
         #region Bytes
 
-        public static BinarySize FromBytes(int bytes)
+        /// <summary>
+        /// Construct with a number of bytes
+        /// </summary>
+        /// <param name="bytes">Total number of bytes to represent</param>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
+        public static BinarySize FromBytes(uint bytes)
         {
             return new BinarySize(bytes);
         }
 
-        public static BinarySize FromBytes(long bytes)
+        /// <summary>
+        /// Construct with a number of bytes
+        /// </summary>
+        /// <param name="bytes">Total number of bytes to represent</param>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
+        public static BinarySize FromBytes(ulong bytes)
         {
             return new BinarySize(bytes);
         }
@@ -54,120 +64,139 @@ namespace uk.co.mainwave.MissingTypes
 
         #region Kilobytes
 
-        public static BinarySize FromKb(int kb)
+        /// <summary>
+        /// Construct with a number of kilobytes
+        /// </summary>
+        /// <param name="kb">Total number of kilobytes to represent</param>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
+        public static BinarySize FromKb(uint kb)
         {
             return FromBytes(kb * KbMultiplier);
         }
 
-        public static BinarySize FromKb(long kb)
-        {
-            return FromBytes(kb * KbMultiplier);
-        }
-
+        /// <summary>
+        /// Construct with a number of kilobytes
+        /// </summary>
+        /// <param name="kb">Total or fractional number of kilobytes to represent</param>
+        /// <exception cref="ArgumentOutOfRangeException">kb value is negative or too large</exception>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromKb(decimal kb)
         {
-            return FromBytes((long)(kb * KbMultiplier));
+            CheckRange(kb, KbMultiplier);
+            return FromBytes((ulong)(kb * KbMultiplier));
         }
 
+        /// <summary>
+        /// Construct with a number of kilobytes
+        /// </summary>
+        /// <param name="kb">Total or fractional number of kilobytes to represent</param>
+        /// <exception cref="ArgumentOutOfRangeException">kb value is negative or too large</exception>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromKb(double kb)
         {
-            return FromBytes((long)(kb * KbMultiplier));
+            CheckRange(kb, KbMultiplier);
+            return FromBytes((ulong)(kb * KbMultiplier));
         }
 
         #endregion
 
         #region Megabytes
 
-        public static BinarySize FromMb(int mb)
+        /// <summary>
+        /// Construct with a number of megabytes
+        /// </summary>
+        /// <param name="kb">Total number of megabytes to represent</param>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
+        public static BinarySize FromMb(uint mb)
         {
             return FromBytes(mb * MbMultiplier);
         }
 
-        public static BinarySize FromMb(long mb)
-        {
-            return FromBytes(mb * MbMultiplier);
-        }
-
+        /// <summary>
+        /// Construct with a number of megabytes
+        /// </summary>
+        /// <param name="kb">Total or fractional number of megabytes to represent</param>
+        /// <exception cref="ArgumentOutOfRangeException">mb value is negative or too large</exception>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(decimal mb)
         {
-            return FromBytes((long)(mb * MbMultiplier));
+            CheckRange(mb, MbMultiplier);
+            return FromBytes((ulong)(mb * MbMultiplier));
         }
 
+        /// <summary>
+        /// Construct with a number of megabytes
+        /// </summary>
+        /// <param name="kb">Total or fractional number of megabytes to represent</param>
+        /// <exception cref="ArgumentOutOfRangeException">mb value is negative or too large</exception>
+        /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(double mb)
         {
-            return FromBytes((long)(mb * MbMultiplier));
+            CheckRange(mb, MbMultiplier);
+            return FromBytes((ulong)(mb * MbMultiplier));
         }
 
         #endregion
 
         #region Gigabytes
 
-        public static BinarySize FromGb(int gb)
-        {
-            return FromBytes(gb * GbMultiplier);
-        }
-
-        public static BinarySize FromGb(long gb)
+        public static BinarySize FromGb(uint gb)
         {
             return FromBytes(gb * GbMultiplier);
         }
 
         public static BinarySize FromGb(decimal gb)
         {
-            return FromBytes((long)(gb * GbMultiplier));
+            CheckRange(gb, GbMultiplier);
+            return FromBytes((ulong)(gb * GbMultiplier));
         }
 
         public static BinarySize FromGb(double gb)
         {
-            return FromBytes((long)(gb * GbMultiplier));
+            CheckRange(gb, GbMultiplier);
+            return FromBytes((ulong)(gb * GbMultiplier));
         }
 
         #endregion
 
         #region Terabytes
 
-        public static BinarySize FromTb(int tb)
-        {
-            return FromBytes(tb * TbMultiplier);
-        }
-
-        public static BinarySize FromTb(long tb)
+        public static BinarySize FromTb(uint tb)
         {
             return FromBytes(tb * TbMultiplier);
         }
 
         public static BinarySize FromTb(decimal tb)
         {
-            return FromBytes((long)(tb * TbMultiplier));
+            CheckRange(tb, TbMultiplier);
+            return FromBytes((ulong)(tb * TbMultiplier));
         }
 
         public static BinarySize FromTb(double tb)
         {
-            return FromBytes((long)(tb * TbMultiplier));
+            CheckRange(tb, TbMultiplier);
+            return FromBytes((ulong)(tb * TbMultiplier));
         }
 
         #endregion
 
         #region Petabytes
 
-        public static BinarySize FromPb(int pb)
-        {
-            return FromBytes(pb * PbMultiplier);
-        }
-
-        public static BinarySize FromPb(long pb)
+        public static BinarySize FromPb(uint pb)
         {
             return FromBytes(pb * PbMultiplier);
         }
 
         public static BinarySize FromPb(decimal pb)
         {
-            return FromBytes((long)(pb * PbMultiplier));
+            CheckRange(pb, PbMultiplier);
+            return FromBytes((ulong)(pb * PbMultiplier));
         }
 
         public static BinarySize FromPb(double pb)
         {
-            return FromBytes((long)(pb * PbMultiplier));
+            CheckRange(pb, PbMultiplier);
+            return FromBytes((ulong)(pb * PbMultiplier));
         }
 
         #endregion
@@ -178,68 +207,80 @@ namespace uk.co.mainwave.MissingTypes
 
         #region Bytes
 
-        public long TotalBytes => _bytes;
-
-        public long Bytes => (_bytes & ByteMask);
+        public ulong ToBytes => _bytes;
 
         #endregion
 
         #region Kilobytes
 
-        public long Kb => (_bytes >> 10) & ByteMask;
+        public double ToKbAsDouble => _bytes / (double)KbMultiplier;
 
-        public double TotalKbAsDouble => _bytes / (double)KbMultiplier;
-
-        public decimal TotalKbAsDecimal => _bytes / (decimal)KbMultiplier;
+        public decimal ToKbAsDecimal => _bytes / (decimal)KbMultiplier;
 
         #endregion
 
         #region Megabytes
 
-        public long Mb => (_bytes >> 20) & ByteMask;
+        public double ToMbAsDouble => _bytes / (double)MbMultiplier;
 
-        public double TotalMbAsDouble => _bytes / (double)MbMultiplier;
-
-        public decimal TotalMbAsDecimal => _bytes / (decimal)MbMultiplier;
+        public decimal ToMbAsDecimal => _bytes / (decimal)MbMultiplier;
 
         #endregion
 
-        public long Gb => (_bytes >> 30) & ByteMask;
+        #region Gigabytes
 
-        public long Tb => (_bytes >> 40) & ByteMask;
+        public double ToGbAsDouble => _bytes / (double)GbMultiplier;
 
-        public long Pb => (_bytes >> 50) & ByteMask;
+        public decimal ToGbAsDecimal => _bytes / (decimal)GbMultiplier;
+
+        #endregion
+
+        #region Terabytes
+
+        public double ToTbAsDouble => _bytes / (double)TbMultiplier;
+
+        public decimal ToTbAsDecimal => _bytes / (decimal)TbMultiplier;
+
+        #endregion
+
+        #region Petabytes
+
+        public double ToPbAsDouble => _bytes / (double)PbMultiplier;
+
+        public decimal ToPbAsDecimal => _bytes / (decimal)PbMultiplier;
+
+        #endregion
 
         #endregion
 
         #region Operators
 
-        public static explicit operator BinarySize(int value)
+        public static explicit operator BinarySize(uint value)
         {
             return new BinarySize(value);
         }
 
-        public static explicit operator BinarySize(long value)
+        public static explicit operator BinarySize(ulong value)
         {
             return new BinarySize(value);
         }
 
-        public static BinarySize operator +(BinarySize a, int value)
+        public static BinarySize operator +(BinarySize a, uint value)
         {
             return new BinarySize(a._bytes + value);
         }
 
-        public static BinarySize operator +(BinarySize a, long value)
+        public static BinarySize operator +(BinarySize a, ulong value)
         {
             return new BinarySize(a._bytes + value);
         }
 
-        public static BinarySize operator -(BinarySize a, int value)
+        public static BinarySize operator -(BinarySize a, uint value)
         {
             return new BinarySize(Math.Max(0, a._bytes - value));
         }
 
-        public static BinarySize operator -(BinarySize a, long value)
+        public static BinarySize operator -(BinarySize a, ulong value)
         {
             return new BinarySize(Math.Max(0, a._bytes - value));
         }
@@ -301,5 +342,35 @@ namespace uk.co.mainwave.MissingTypes
             if (ReferenceEquals(null, other)) return 1;
             return _bytes.CompareTo(other._bytes);
         }
+
+        #region Private methods
+
+        private static void CheckRange(decimal value, ulong multiplier)
+        {
+            if (value < 0M)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            if (value > decimal.MaxValue / multiplier)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private static void CheckRange(double value, ulong multiplier)
+        {
+            if (value < 0.0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            if (value > double.MaxValue / multiplier)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        #endregion
     }
 }
