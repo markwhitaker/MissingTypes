@@ -19,6 +19,13 @@ namespace uk.co.mainwave.MissingTypes
 
         private const ulong ByteMask = 0x3FFL;
 
+        private const ulong MaxBytes = ulong.MaxValue;  // FFFF FFFF FFFF FFFF
+        private const ulong MaxKb = MaxBytes >> 10;     //   3F FFFF FFFF FFFF
+        private const ulong MaxMb = MaxBytes >> 20;     //       FFF FFFF FFFF
+        private const ulong MaxGb = MaxBytes >> 30;     //         3 FFFF FFFF
+        private const ulong MaxTb = MaxBytes >> 40;     //             FF FFFF
+        private const ulong MaxPb = MaxBytes >> 50;     //                3FFF
+
         #endregion
 
         #region Fields
@@ -45,16 +52,6 @@ namespace uk.co.mainwave.MissingTypes
         /// </summary>
         /// <param name="bytes">Total number of bytes to represent</param>
         /// <returns>New <see cref="BinarySize"/> object</returns>
-        public static BinarySize FromBytes(uint bytes)
-        {
-            return new BinarySize(bytes);
-        }
-
-        /// <summary>
-        /// Construct with a number of bytes
-        /// </summary>
-        /// <param name="bytes">Total number of bytes to represent</param>
-        /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromBytes(ulong bytes)
         {
             return new BinarySize(bytes);
@@ -69,8 +66,9 @@ namespace uk.co.mainwave.MissingTypes
         /// </summary>
         /// <param name="kb">Total number of kilobytes to represent</param>
         /// <returns>New <see cref="BinarySize"/> object</returns>
-        public static BinarySize FromKb(uint kb)
+        public static BinarySize FromKb(ulong kb)
         {
+            CheckRange(kb, MaxKb);
             return FromBytes(kb * KbMultiplier);
         }
 
@@ -82,7 +80,8 @@ namespace uk.co.mainwave.MissingTypes
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromKb(decimal kb)
         {
-            CheckRange(kb, KbMultiplier);
+            CheckRange(kb, MaxKb);
+            CheckOverflow(kb, KbMultiplier);
             return FromBytes((ulong)(kb * KbMultiplier));
         }
 
@@ -94,7 +93,8 @@ namespace uk.co.mainwave.MissingTypes
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromKb(double kb)
         {
-            CheckRange(kb, KbMultiplier);
+            CheckRange(kb, MaxKb);
+            CheckOverflow(kb, KbMultiplier);
             return FromBytes((ulong)(kb * KbMultiplier));
         }
 
@@ -107,8 +107,9 @@ namespace uk.co.mainwave.MissingTypes
         /// </summary>
         /// <param name="kb">Total number of megabytes to represent</param>
         /// <returns>New <see cref="BinarySize"/> object</returns>
-        public static BinarySize FromMb(uint mb)
+        public static BinarySize FromMb(ulong mb)
         {
+            CheckRange(mb, MaxMb);
             return FromBytes(mb * MbMultiplier);
         }
 
@@ -120,7 +121,8 @@ namespace uk.co.mainwave.MissingTypes
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(decimal mb)
         {
-            CheckRange(mb, MbMultiplier);
+            CheckRange(mb, MaxMb);
+            CheckOverflow(mb, MbMultiplier);
             return FromBytes((ulong)(mb * MbMultiplier));
         }
 
@@ -132,7 +134,8 @@ namespace uk.co.mainwave.MissingTypes
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(double mb)
         {
-            CheckRange(mb, MbMultiplier);
+            CheckRange(mb, MaxMb);
+            CheckOverflow(mb, MbMultiplier);
             return FromBytes((ulong)(mb * MbMultiplier));
         }
 
@@ -140,20 +143,23 @@ namespace uk.co.mainwave.MissingTypes
 
         #region Gigabytes
 
-        public static BinarySize FromGb(uint gb)
+        public static BinarySize FromGb(ulong gb)
         {
+            CheckRange(gb, MaxGb);
             return FromBytes(gb * GbMultiplier);
         }
 
         public static BinarySize FromGb(decimal gb)
         {
-            CheckRange(gb, GbMultiplier);
+            CheckRange(gb, MaxGb);
+            CheckOverflow(gb, GbMultiplier);
             return FromBytes((ulong)(gb * GbMultiplier));
         }
 
         public static BinarySize FromGb(double gb)
         {
-            CheckRange(gb, GbMultiplier);
+            CheckRange(gb, MaxGb);
+            CheckOverflow(gb, GbMultiplier);
             return FromBytes((ulong)(gb * GbMultiplier));
         }
 
@@ -161,20 +167,23 @@ namespace uk.co.mainwave.MissingTypes
 
         #region Terabytes
 
-        public static BinarySize FromTb(uint tb)
+        public static BinarySize FromTb(ulong tb)
         {
+            CheckRange(tb, MaxTb);
             return FromBytes(tb * TbMultiplier);
         }
 
         public static BinarySize FromTb(decimal tb)
         {
-            CheckRange(tb, TbMultiplier);
+            CheckRange(tb, MaxTb);
+            CheckOverflow(tb, TbMultiplier);
             return FromBytes((ulong)(tb * TbMultiplier));
         }
 
         public static BinarySize FromTb(double tb)
         {
-            CheckRange(tb, TbMultiplier);
+            CheckRange(tb, MaxTb);
+            CheckOverflow(tb, TbMultiplier);
             return FromBytes((ulong)(tb * TbMultiplier));
         }
 
@@ -182,20 +191,23 @@ namespace uk.co.mainwave.MissingTypes
 
         #region Petabytes
 
-        public static BinarySize FromPb(uint pb)
+        public static BinarySize FromPb(ulong pb)
         {
+            CheckRange(pb, MaxPb);
             return FromBytes(pb * PbMultiplier);
         }
 
         public static BinarySize FromPb(decimal pb)
         {
-            CheckRange(pb, PbMultiplier);
+            CheckRange(pb, MaxPb);
+            CheckOverflow(pb, PbMultiplier);
             return FromBytes((ulong)(pb * PbMultiplier));
         }
 
         public static BinarySize FromPb(double pb)
         {
-            CheckRange(pb, PbMultiplier);
+            CheckRange(pb, MaxPb);
+            CheckOverflow(pb, PbMultiplier);
             return FromBytes((ulong)(pb * PbMultiplier));
         }
 
@@ -317,12 +329,29 @@ namespace uk.co.mainwave.MissingTypes
 
         #endregion
 
+        #region IEquatable methods
+
         public bool Equals(BinarySize other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return _bytes == other._bytes;
         }
+
+        #endregion
+
+        #region IComparable methods
+
+        public int CompareTo(BinarySize other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return _bytes.CompareTo(other._bytes);
+        }
+
+        #endregion
+
+        #region Object overrides
 
         public override bool Equals(object obj)
         {
@@ -336,36 +365,60 @@ namespace uk.co.mainwave.MissingTypes
             return _bytes.GetHashCode();
         }
 
-        public int CompareTo(BinarySize other)
+        public override string ToString()
         {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            return _bytes.CompareTo(other._bytes);
+            return string.Format("{0:N0} bytes", _bytes);
         }
+
+        #endregion
 
         #region Private methods
 
-        private static void CheckRange(decimal value, ulong multiplier)
+        private static void CheckRange(ulong value, ulong max)
         {
-            if (value < 0M)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            if (value > decimal.MaxValue / multiplier)
+            if (value > max)
             {
                 throw new ArgumentOutOfRangeException();
             }
         }
 
-        private static void CheckRange(double value, ulong multiplier)
+        private static void CheckRange(decimal value, ulong max)
         {
-            if (value < 0.0)
+            if (value < 0M || value > (decimal)max)
             {
                 throw new ArgumentOutOfRangeException();
             }
+        }
 
-            if (value > double.MaxValue / multiplier)
+        private static void CheckRange(double value, ulong max)
+        {
+            if (value < 0.0 || value > (double)max)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
+        /// Check for overflow errors when multiplying values with a product at the very upper limit of the ulong range
+        /// </summary>
+        /// <param name="value">Value to check</param>
+        /// <param name="multiplier">Multiplier to apply</param>
+        private static void CheckOverflow(decimal value, ulong multiplier)
+        {
+            if ((ulong)(value * multiplier) < value)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
+        /// Check for overflow errors when multiplying values with a product at the very upper limit of the ulong range
+        /// </summary>
+        /// <param name="value">Value to check</param>
+        /// <param name="multiplier">Multiplier to apply</param>
+        private static void CheckOverflow(double value, ulong multiplier)
+        {
+            if ((ulong)(value * multiplier) < value)
             {
                 throw new ArgumentOutOfRangeException();
             }
