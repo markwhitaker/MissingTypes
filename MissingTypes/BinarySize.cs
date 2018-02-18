@@ -265,66 +265,84 @@ namespace uk.co.mainwave.MissingTypes
 
         #endregion
 
-        #region Operators
+        #region Static properties
 
-        public static explicit operator BinarySize(uint value)
-        {
-            return new BinarySize(value);
-        }
+        /// <summary>
+        /// A BinarySize with 0 bytes
+        /// </summary>
+        public static BinarySize Zero { get; } = new BinarySize(0);
+
+        #endregion
+
+        #region Operators
 
         public static explicit operator BinarySize(ulong value)
         {
             return new BinarySize(value);
         }
 
-        public static BinarySize operator +(BinarySize a, uint value)
-        {
-            return new BinarySize(a._bytes + value);
-        }
-
         public static BinarySize operator +(BinarySize a, ulong value)
         {
+            // Check the sum of the two values is <= ulong.MaxValue
+            if ((ulong.MaxValue - a._bytes) < value)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             return new BinarySize(a._bytes + value);
         }
 
-        public static BinarySize operator -(BinarySize a, uint value)
+        public static BinarySize operator +(BinarySize a, BinarySize b)
         {
-            return new BinarySize(Math.Max(0, a._bytes - value));
+            // Check the sum of the two values is <= ulong.MaxValue
+            if ((ulong.MaxValue - a._bytes) < b._bytes)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            return a + b._bytes;
         }
 
-        public static BinarySize operator -(BinarySize a, ulong value)
+        public static BinarySize operator -(BinarySize a, ulong b)
         {
-            return new BinarySize(Math.Max(0, a._bytes - value));
+            return (a._bytes < b)
+                ? Zero
+                : new BinarySize(a._bytes - b);
         }
 
-        public static bool operator ==(BinarySize me, BinarySize you)
+        public static BinarySize operator -(BinarySize a, BinarySize b)
         {
-            return me != null && me.Equals(you);
+            return a - b._bytes;
         }
 
-        public static bool operator !=(BinarySize me, BinarySize you)
+        public static bool operator ==(BinarySize a, BinarySize b)
         {
-            return !(me == you);
+            return !ReferenceEquals(a, null) && a.Equals(b);
         }
 
-        public static bool operator >(BinarySize me, BinarySize you)
+        public static bool operator !=(BinarySize a, BinarySize b)
         {
-            return me.CompareTo(you) > 0;
+            return !(a == b);
         }
 
-        public static bool operator <(BinarySize me, BinarySize you)
+        public static bool operator >(BinarySize a, BinarySize b)
         {
-            return me.CompareTo(you) < 0;
+            return a.CompareTo(b) > 0;
         }
 
-        public static bool operator >=(BinarySize me, BinarySize you)
+        public static bool operator <(BinarySize a, BinarySize b)
         {
-            return me.CompareTo(you) >= 0;
+            return a.CompareTo(b) < 0;
         }
 
-        public static bool operator <=(BinarySize me, BinarySize you)
+        public static bool operator >=(BinarySize a, BinarySize b)
         {
-            return me.CompareTo(you) <= 0;
+            return a.CompareTo(b) >= 0;
+        }
+
+        public static bool operator <=(BinarySize a, BinarySize b)
+        {
+            return a.CompareTo(b) <= 0;
         }
 
         #endregion

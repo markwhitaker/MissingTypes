@@ -2,11 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
-namespace uk.co.mainwave.MissingTypes.Test
+namespace uk.co.mainwave.MissingTypes.Test.BinarySizeTests
 {
     [SuppressMessage("ReSharper", "RedundantCast")]
     [SuppressMessage("ReSharper", "UnusedVariable")]
-    public class BinarySizeTests
+    public class ConstructorTests
     {
         #region Constants
 
