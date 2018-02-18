@@ -157,7 +157,7 @@ namespace uk.co.mainwave.MissingTypes
         /// Get a string representation, with all parts included even if zero.
         /// </summary>
         /// <example>4.1.0.0 will return "4.1.0.0"</example>
-        /// <returns>A short string representation of this version number</returns>
+        /// <returns>A long string representation of this version number</returns>
         public string ToLongString()
         {
             return string.Join(".", _parts);
