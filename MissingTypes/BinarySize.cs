@@ -105,7 +105,7 @@ namespace uk.co.mainwave.MissingTypes
         /// <summary>
         /// Construct with a number of megabytes
         /// </summary>
-        /// <param name="kb">Total number of megabytes to represent</param>
+        /// <param name="mb">Total number of megabytes to represent</param>
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(ulong mb)
         {
@@ -116,7 +116,7 @@ namespace uk.co.mainwave.MissingTypes
         /// <summary>
         /// Construct with a number of megabytes
         /// </summary>
-        /// <param name="kb">Total or fractional number of megabytes to represent</param>
+        /// <param name="mb">Total or fractional number of megabytes to represent</param>
         /// <exception cref="ArgumentOutOfRangeException">mb value is negative or too large</exception>
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(decimal mb)
@@ -129,7 +129,7 @@ namespace uk.co.mainwave.MissingTypes
         /// <summary>
         /// Construct with a number of megabytes
         /// </summary>
-        /// <param name="kb">Total or fractional number of megabytes to represent</param>
+        /// <param name="mb">Total or fractional number of megabytes to represent</param>
         /// <exception cref="ArgumentOutOfRangeException">mb value is negative or too large</exception>
         /// <returns>New <see cref="BinarySize"/> object</returns>
         public static BinarySize FromMb(double mb)
